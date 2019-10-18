@@ -1,8 +1,5 @@
 package com.villera.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +19,11 @@ public class AdminService {
 	
 	public void updateAdmin(AdminModel admin) {
 		adminrepo.save(admin);
+	}
+	
+	public AdminModel addAdmin(AdminModel admin){
+		AdminModel addadmin =adminrepo.save(admin);
+		return addadmin;
 	}
 		
 }

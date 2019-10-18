@@ -13,20 +13,26 @@ public class AdminModel {
 	
 	@Id @GeneratedValue(strategy=GenerationType.SEQUENCE)
 	@Column(name="administrator_id")
-	private int admin_id;
+	private Integer admin_id;
+	@Column(name="FirstName")
 	private String first_name;
+	@Column(name="LastName")
 	private String last_name;
+	@Column(name="Age")
 	private int age;
+	@Column(name="UserName")
 	private String user_name;
+	@Column(name="Password")
 	private String password;
+	@Column(name="Email")
 	private String email;
 	
 	
 	
-	public int getAdmin_id() {
+	public Integer getAdmin_id() {
 		return admin_id;
 	}
-	public void setAdmin_id(int admin_id) {
+	public void setAdmin_id(Integer admin_id) {
 		this.admin_id = admin_id;
 	}
 	public String getEmail() {
