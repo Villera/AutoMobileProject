@@ -1,17 +1,24 @@
 package com.villera.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name = "Customer_Table")
 public class CustomerModel {
 
-	@Id @GeneratedValue(strategy=GenerationType.SEQUENCE)
+	@Id //@GeneratedValue(strategy=GenerationType.SEQUENCE)
+	@GeneratedValue(generator="incrementGenerator2", strategy=GenerationType.SEQUENCE)
+	@GenericGenerator(name="incrementGenerator2", strategy="increment")
 	@Column(name = "Customer_Id")
 	private Integer customerid;
 	@Column(name = "First_Name")
@@ -25,7 +32,33 @@ public class CustomerModel {
 	@Column(name = "Phone_Number")
 	private String phonenumber;
 	
+	@OneToOne(fetch = FetchType.LAZY,
+	        cascade = CascadeType.ALL,
+	        mappedBy = "customer1")	
+	private VehicleModel vehiclemodel;
+
 	
+	public CustomerModel() {}
+	public CustomerModel(Integer customerid, String firstname, String lastname, String address, String email,
+			String phonenumber) {
+		super();
+		this.customerid = customerid;
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.address = address;
+		this.email = email;
+		this.phonenumber = phonenumber;
+	}
+
+
+
+
+	public VehicleModel getVehiclemodel() {
+		return vehiclemodel;
+	}
+	public void setVehiclemodel(VehicleModel vehiclemodel) {
+		this.vehiclemodel = vehiclemodel;
+	}
 	public Integer getCustomerid() {
 		return customerid;
 	}
