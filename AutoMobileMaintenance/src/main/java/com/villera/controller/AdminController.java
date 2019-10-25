@@ -6,10 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +24,7 @@ import com.villera.model.VehicleModel;
 import com.villera.service.AdminService;
 
 @RestController
+@CrossOrigin(origins="http://localhost:4200")
 @RequestMapping(value="/administrator")
 public class AdminController {
 
@@ -44,6 +47,13 @@ public class AdminController {
 		header.setLocation(builder.path("/admin/{admin_id}").buildAndExpand(admin.getAdmin_id()).toUri());
 		return new ResponseEntity<Void>(header,HttpStatus.CREATED);
 	}
+	
+	@PutMapping("/update-admin/{admin_id}")
+    public ResponseEntity<String> updateAdmin(@RequestBody AdminModel admin,
+      @PathVariable("admin_id") Integer admin_id) {
+        adminservice.updateAdmin(admin);
+        return ResponseEntity.ok("Administrator Updated");
+  }
 	
 	
 	//For Customers
@@ -72,6 +82,13 @@ public class AdminController {
 		public ResponseEntity<Void> deleteCustomer(@PathVariable("customerid") Integer customerid){adminservice.deleteCustomer(customerid);
 		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 	}
+		
+		  @PutMapping("/update-customer/{customerid}")
+		    public ResponseEntity<String> updateCustomer(@RequestBody CustomerModel customer,
+		      @PathVariable("customerid") Integer customerid) {
+		        adminservice.updateCustomer(customer);
+		        return ResponseEntity.ok("Customer Updated");
+		  }
 		
 	//For Vehicles
 	
@@ -102,6 +119,13 @@ public class AdminController {
 	return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 	}
 	
+	 @PutMapping("/update-vehicle/{vehicle_id}")
+	    public ResponseEntity<String> updateVehicle(@RequestBody VehicleModel vhcl,
+	      @PathVariable("vehicle_id") Integer vehicle_id) {
+	        adminservice.updateVehicle(vhcl);
+	        return ResponseEntity.ok("Vehicle Updated");
+	  }
+	
 	//For ServiceCentres
 	
 	@GetMapping("/servicecentre/{servicecentre_id}")
@@ -130,6 +154,13 @@ public class AdminController {
 	public ResponseEntity<Void> deleteServiceCentre(@PathVariable("servicecentre_id") Integer servicecentre_id){adminservice.deleteServiceCentre(servicecentre_id);
 	return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 	}
+	
+	 @PutMapping("/update-servicecentre/{servicecentre_id}")
+	    public ResponseEntity<String> updateServiceCentre(@RequestBody ServiceCentreModel service,
+	      @PathVariable("servicecentre_id") Integer servicecentre_id) {
+	        adminservice.updateServiceCentre(service);
+	        return ResponseEntity.ok("ServiceCentre Updated");
+	  }
 }
 	
 
