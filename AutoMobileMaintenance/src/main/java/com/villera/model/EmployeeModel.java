@@ -8,12 +8,11 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="AutoCare_Administrator")
-public class AdminModel {
-	
+@Table(name = "AutoCare_Employees")
+public class EmployeeModel {
 	@Id @GeneratedValue(strategy=GenerationType.SEQUENCE)
-	@Column(name="administrator_id")
-	private Integer admin_id;
+	@Column(name="Employee_Id")
+	private Integer employee_id;
 	@Column(name="FirstName")
 	private String first_name;
 	@Column(name="LastName")
@@ -28,18 +27,11 @@ public class AdminModel {
 	private String email;
 	
 	
-	
-	public Integer getAdmin_id() {
-		return admin_id;
+	public Integer getEmployee_id() {
+		return employee_id;
 	}
-	public void setAdmin_id(Integer admin_id) {
-		this.admin_id = admin_id;
-	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
+	public void setEmployee_id(Integer employee_id) {
+		this.employee_id = employee_id;
 	}
 	public String getFirst_name() {
 		return first_name;
@@ -71,5 +63,13 @@ public class AdminModel {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	
+	
 
 }

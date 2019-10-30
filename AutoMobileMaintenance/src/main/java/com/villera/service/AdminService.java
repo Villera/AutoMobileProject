@@ -8,10 +8,12 @@ import org.springframework.stereotype.Service;
 
 import com.villera.model.AdminModel;
 import com.villera.model.CustomerModel;
+import com.villera.model.EmployeeModel;
 import com.villera.model.ServiceCentreModel;
 import com.villera.model.VehicleModel;
 import com.villera.repository.AdminRepo;
 import com.villera.repository.CustomerRepo;
+import com.villera.repository.EmployeeRepo;
 import com.villera.repository.ServiceCentreRepo;
 import com.villera.repository.VehicleRepo;
 
@@ -30,6 +32,9 @@ public class AdminService {
 	@Autowired
 	private CustomerRepo customerrepo;
 	
+	@Autowired
+	private EmployeeRepo employeerepo;
+	
 	
 	public AdminModel getAdminById(Integer admin_id) {
 		AdminModel admin = adminrepo.findById(admin_id).get();
@@ -43,6 +48,12 @@ public class AdminService {
 	public AdminModel addAdmin(AdminModel admin){
 		AdminModel addadmin =adminrepo.save(admin);
 		return addadmin;
+	}
+	
+	public List<AdminModel> getAllAdmins(){
+		List<AdminModel> adminlist=new ArrayList<>();
+		adminrepo.findAll().forEach(e->adminlist.add(e));
+		return adminlist;
 	}
 	
 	
@@ -114,6 +125,30 @@ public class AdminService {
 	
 	public void deleteServiceCentre(Integer serviceId) {
 		servicecentrerepo.deleteById(serviceId);
+	}
+	
+	// For Employee
+	
+	public EmployeeModel getEmployeeById(Integer empId) {
+		EmployeeModel emp = employeerepo.findById(empId).get();
+		return emp;
+	}
+	
+	public List<EmployeeModel> getAllEmployees(){
+		List<EmployeeModel> emplist=new ArrayList<>();
+		employeerepo.findAll().forEach(e->emplist.add(e));
+		return emplist;
+	}
+	public EmployeeModel addEmployee(EmployeeModel emp){
+		EmployeeModel emplist =employeerepo.save(emp);
+		return emplist;
+	}
+	public void updateEmployee(EmployeeModel emp) {
+		employeerepo.save(emp);
+	}
+	
+	public void deleteEmployee(Integer empId) {
+		employeerepo.deleteById(empId);
 	}
 		
 		

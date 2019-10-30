@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "ServiceCentre")
+@Table(name = "AutoCare_ServiceCentre")
 public class ServiceCentreModel {
 	
 	@Id @GeneratedValue(strategy=GenerationType.SEQUENCE)

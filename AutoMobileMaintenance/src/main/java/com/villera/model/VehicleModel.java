@@ -20,7 +20,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 
 @Entity
-@Table(name = "Vehicles")
+@Table(name ="AutoCare_Vehicles")
 public class VehicleModel {
 
 	@Id //@GeneratedValue(strategy=GenerationType.SEQUENCE)

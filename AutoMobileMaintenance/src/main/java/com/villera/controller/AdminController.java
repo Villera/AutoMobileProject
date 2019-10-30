@@ -19,6 +19,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.villera.model.AdminModel;
 import com.villera.model.CustomerModel;
+import com.villera.model.EmployeeModel;
 import com.villera.model.ServiceCentreModel;
 import com.villera.model.VehicleModel;
 import com.villera.service.AdminService;
@@ -54,6 +55,12 @@ public class AdminController {
         adminservice.updateAdmin(admin);
         return ResponseEntity.ok("Administrator Updated");
   }
+	
+	@GetMapping("/alladmins")
+	public ResponseEntity<List<AdminModel>> getAllAdmins(){
+		List<AdminModel> adminlist=adminservice.getAllAdmins();
+		return new ResponseEntity<List<AdminModel>>(adminlist,HttpStatus.OK);
+	}
 	
 	
 	//For Customers
@@ -158,9 +165,47 @@ public class AdminController {
 	 @PutMapping("/update-servicecentre/{servicecentre_id}")
 	    public ResponseEntity<String> updateServiceCentre(@RequestBody ServiceCentreModel service,
 	      @PathVariable("servicecentre_id") Integer servicecentre_id) {
+		 System.out.println("CALLING UPDATE");
 	        adminservice.updateServiceCentre(service);
 	        return ResponseEntity.ok("ServiceCentre Updated");
 	  }
+	 
+	 //For Employee
+	 
+	 @GetMapping("/employee/{employee_id}")
+		public ResponseEntity<EmployeeModel> getEmployeeById(@PathVariable("employee_id") Integer employee_id){
+			EmployeeModel employee=adminservice.getEmployeeById(employee_id);
+			return new ResponseEntity<EmployeeModel>(employee,HttpStatus.OK);
+		}
+		
+		@GetMapping("/allemployees")
+		public ResponseEntity<List<EmployeeModel>> getAllEmployees(){
+			List<EmployeeModel> emplist=adminservice.getAllEmployees();
+			return new ResponseEntity<List<EmployeeModel>>(emplist,HttpStatus.OK);
+		}
+		
+		@PostMapping("/add_employee")
+		public ResponseEntity<Void> addEmployee(@RequestBody EmployeeModel emp, UriComponentsBuilder builder){
+			EmployeeModel flag=adminservice.addEmployee(emp);
+			if(flag==null)
+				return new ResponseEntity<Void>(HttpStatus.CONFLICT);
+			HttpHeaders header=new HttpHeaders();
+			header.setLocation(builder.path("/employee/{employee_id}").buildAndExpand(emp. getEmployee_id()).toUri());
+			return new ResponseEntity<Void>(header,HttpStatus.CREATED);
+		}
+		
+		@DeleteMapping("/delete_employee/{employee_id}")
+		public ResponseEntity<Void> deleteEmployee(@PathVariable("employee_id") Integer employee_id){adminservice.deleteEmployee(employee_id);
+		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+		}
+		
+		 @PutMapping("/update-employee/{employee_id}")
+		    public ResponseEntity<String> updateEmployee(@RequestBody EmployeeModel emp,
+		      @PathVariable("servicecentre_id") Integer servicecentre_id) {
+		        adminservice.updateEmployee(emp);
+		        return ResponseEntity.ok("Employee Updated");
+		  }
+	 
 }
 	
 

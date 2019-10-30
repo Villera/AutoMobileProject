@@ -13,7 +13,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table(name = "Customer_Table")
+@Table(name = "AutoCare_Customers")
 public class CustomerModel {
 
 	@Id //@GeneratedValue(strategy=GenerationType.SEQUENCE)

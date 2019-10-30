@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "ServiceRequests")
+@Table(name = "AutoCare_ServiceRequests")
 public class ServiceRequestModel {
 	
 	@Id@GeneratedValue(strategy=GenerationType.SEQUENCE)
