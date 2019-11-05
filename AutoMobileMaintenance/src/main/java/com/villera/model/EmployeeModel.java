@@ -1,17 +1,34 @@
 package com.villera.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "AutoCare_Employees")
+@Table(name = "AutoEmp", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {
+                "username"
+            }),
+            @UniqueConstraint(columnNames = {
+                "email"
+            })
+    })
 public class EmployeeModel {
-	@Id @GeneratedValue(strategy=GenerationType.SEQUENCE)
-	@Column(name="Employee_Id")
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "JWT_VILLERA_AUTOEMP_SEQ")
+    @SequenceGenerator(sequenceName = "jwt_villera_autoemp_seq", initialValue = 1, allocationSize = 1, name = "JWT_VILLERA_AUTOEMP_SEQ")
 	private Integer employee_id;
 	@Column(name="FirstName")
 	private String first_name;
@@ -20,13 +37,25 @@ public class EmployeeModel {
 	@Column(name="Age")
 	private int age;
 	@Column(name="UserName")
-	private String user_name;
+	private String username;
 	@Column(name="Password")
 	private String password;
 	@Column(name="Email")
 	private String email;
 	
+	 @ManyToMany(fetch = FetchType.LAZY)
+	    @JoinTable(name = "AutoEmp_AutoRoles", 
+	    	joinColumns = {@JoinColumn(name = "employee_id")}, 
+	    	inverseJoinColumns = {@JoinColumn(name = "role_id")})
+	    private Set<Role> roles = new HashSet<>();
 	
+	
+	public Set<Role> getRoles() {
+		return roles;
+	}
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
+	}
 	public Integer getEmployee_id() {
 		return employee_id;
 	}
@@ -51,11 +80,12 @@ public class EmployeeModel {
 	public void setAge(int age) {
 		this.age = age;
 	}
-	public String getUser_name() {
-		return user_name;
+	
+	public String getUsername() {
+		return username;
 	}
-	public void setUser_name(String user_name) {
-		this.user_name = user_name;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 	public String getPassword() {
 		return password;
