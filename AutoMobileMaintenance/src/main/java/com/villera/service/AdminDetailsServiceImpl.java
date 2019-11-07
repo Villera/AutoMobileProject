@@ -27,4 +27,5 @@ public class AdminDetailsServiceImpl implements UserDetailsService {
 
 		return AdminPrinciple.build(admin);
 	}
+	
 }

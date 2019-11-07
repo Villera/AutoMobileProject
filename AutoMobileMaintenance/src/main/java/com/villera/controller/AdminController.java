@@ -1,11 +1,17 @@
 package com.villera.controller;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,20 +23,31 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.villera.message.request.SignUpForm;
+import com.villera.message.response.ResponseMessage;
 import com.villera.model.AdminModel;
 import com.villera.model.CustomerModel;
 import com.villera.model.EmployeeModel;
+import com.villera.model.Role;
+import com.villera.model.RoleName;
 import com.villera.model.ServiceCentreModel;
 import com.villera.model.VehicleModel;
+import com.villera.repository.RoleRepository;
 import com.villera.service.AdminService;
 
 @RestController
-@CrossOrigin(origins="http://localhost:4200")
-@RequestMapping(value="/administrator")
+@CrossOrigin(origins= "*", maxAge = 3600)                                  //"http://localhost:4200"
+//@RequestMapping(value="/api/administrator")
 public class AdminController {
 
 	@Autowired
 	private AdminService adminservice;
+	
+	@Autowired
+	RoleRepository roleRepository;
+
+	@Autowired
+	PasswordEncoder encoder;
 	
 	
 	@GetMapping("/admin/{admin_id}")
@@ -39,9 +56,24 @@ public class AdminController {
 		return new ResponseEntity<AdminModel>(admin,HttpStatus.OK);
 		}
 	
+	
 	@PostMapping("/adimini")
 	public ResponseEntity<Void> addAdmin(@RequestBody AdminModel admin, UriComponentsBuilder builder){
-		AdminModel flag=adminservice.addAdmin(admin);
+		
+
+		//Set<String> strRoles = signUpRequest.getRole();
+		Set<Role> roles = new HashSet<>();
+
+		Role adminRole = roleRepository.findByName(RoleName.ROLE_ADMIN)
+						.orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
+				roles.add(adminRole);
+
+		AdminModel newAdmin = admin;
+		String password = newAdmin.getPassword();
+		newAdmin.setPassword(encoder.encode(password));
+		newAdmin.setRoles(roles);
+		
+		AdminModel flag=adminservice.addAdmin(newAdmin);
 		if(flag==null)
 			return new ResponseEntity<Void>(HttpStatus.CONFLICT);
 		HttpHeaders header=new HttpHeaders();
@@ -64,19 +96,23 @@ public class AdminController {
 	
 	
 	//For Customers
+
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/customer/{customerid}")
 	public ResponseEntity<CustomerModel> getCustomerById(@PathVariable("customerid") Integer customerid){
 		CustomerModel cus=adminservice.getCustomerById(customerid);
 		return new ResponseEntity<CustomerModel>(cus,HttpStatus.OK);
 	}
 	
-	@GetMapping("/allcustomers")
+	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping("/api/administrator/allcustomers")
 	public ResponseEntity<List<CustomerModel>> getAllCustomers(){
 		List<CustomerModel> cuslist=adminservice.getAllCustomers();
 		return new ResponseEntity<List<CustomerModel>>(cuslist,HttpStatus.OK);
 	}
 	
-	@PostMapping("/customer")
+	@PreAuthorize("hasRole('ADMIN')")
+	@PostMapping("/api/administrator/customer")
 	public ResponseEntity<Void> addCustomer(@RequestBody CustomerModel cus, UriComponentsBuilder builder){
 		CustomerModel flag=adminservice.addCustomer(cus);
 		if(flag==null)
@@ -85,11 +121,12 @@ public class AdminController {
 		header.setLocation(builder.path("/customer/{customerid}").buildAndExpand(cus.getCustomerid()).toUri());
 		return new ResponseEntity<Void>(header,HttpStatus.CREATED);
 	}
-		@DeleteMapping("/remove_customer/{customerid}")
+	@PreAuthorize("hasRole('ADMIN')")
+		@DeleteMapping("/api/removecustomer/{customerid}")
 		public ResponseEntity<Void> deleteCustomer(@PathVariable("customerid") Integer customerid){adminservice.deleteCustomer(customerid);
 		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 	}
-		
+	@PreAuthorize("hasRole('ADMIN')")
 		  @PutMapping("/update-customer/{customerid}")
 		    public ResponseEntity<String> updateCustomer(@RequestBody CustomerModel customer,
 		      @PathVariable("customerid") Integer customerid) {
@@ -205,6 +242,10 @@ public class AdminController {
 		        adminservice.updateEmployee(emp);
 		        return ResponseEntity.ok("Employee Updated");
 		  }
+		 
+		 
+		 
+
 	 
 }
 	

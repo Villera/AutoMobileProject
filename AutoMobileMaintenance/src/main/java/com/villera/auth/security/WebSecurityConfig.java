@@ -17,6 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.villera.security.jwt.JwtAuthEntryPoint;
 import com.villera.security.jwt.JwtAuthTokenFilter;
 import com.villera.service.AdminDetailsServiceImpl;
+import com.villera.service.AdminService;
 import com.villera.service.CustomerDetailsServiceImpl;
 import com.villera.service.EmployeeDetailsServiceImpl;
 
@@ -27,6 +28,9 @@ import com.villera.service.EmployeeDetailsServiceImpl;
 		prePostEnabled = true
 )
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+	
+	
+	
     @Autowired
     CustomerDetailsServiceImpl customerDetailsService;
     
